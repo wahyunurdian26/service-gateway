@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"microservice/gateway/kit"
-	pbaccount "microservice/cp-proto/account"
-	pbtransaction "microservice/cp-proto/transaction"
+	"github.com/wahyunurdian26/gateway/kit"
+	pbaccount "github.com/wahyunurdian26/client/account"
+	pbtransaction "github.com/wahyunurdian26/client/transaction"
 )
 
 type GatewayHandler struct {

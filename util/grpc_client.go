@@ -5,9 +5,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	"microservice/util/client"
-	pbaccount "microservice/cp-proto/account"
-	pbtransaction "microservice/cp-proto/transaction"
+	"github.com/wahyunurdian26/client"
+	pbaccount "github.com/wahyunurdian26/client/account"
+	pbtransaction "github.com/wahyunurdian26/client/transaction"
 )
 
 func NewAccountServiceClient(serverAddr string) (pbaccount.AccountServiceClient, *grpc.ClientConn, error) {

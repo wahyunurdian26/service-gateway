@@ -1,8 +1,8 @@
 package dto
 
 import (
-	pbaccount "microservice/cp-proto/account"
-	"microservice/gateway/kit"
+	pbaccount "github.com/wahyunurdian26/client/account"
+	"github.com/wahyunurdian26/gateway/kit"
 )
 
 type ParseRequest struct {

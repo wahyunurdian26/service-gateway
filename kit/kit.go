@@ -4,10 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"regexp"
+	"strings"
 
-	"microservice/util/model"
-	"microservice/util/requestid"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/wahyunurdian26/util/model"
+	"github.com/wahyunurdian26/util/requestid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -75,6 +78,62 @@ func NewRouter(r *mux.Router) *Router {
 	return &Router{Router: r}
 }
 
+var (
+	rgbb *regexp.Regexp
+)
+
+func getBBPattern() *regexp.Regexp {
+	r, _ := regexp.Compile(`^(?:https?:\/\/)?(?:[^.]+\.)?bluebird\.id(?::\d{1,5})?(\/.*)?`)
+	return r
+}
+
+// HealthCheckHandler returns http 200 for root path
+func HealthCheckHandler(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			handler.ServeHTTP(w, r)
+		}
+	})
+}
+
+// CORSHandler enables cross-origin resource sharing
+func CORSHandler(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if origin := r.Header.Get("Origin"); origin != "" {
+			if rgbb == nil {
+				rgbb = getBBPattern()
+			}
+
+			if rgbb.MatchString(origin) {
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+				if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
+					headers := []string{"Content-Type", "Accept", "Authorization"}
+					w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
+					methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "PATCH"}
+					w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
+					w.Header().Set("Access-Control-Max-Age", "86400")
+					return
+				}
+			} else {
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
+		}
+		handler.ServeHTTP(w, r)
+	})
+}
+
+// DefaultHTTPHandler specifies default http handler
+func DefaultHTTPHandler(handler http.Handler) http.Handler {
+	handler = handlers.CompressHandler(handler)
+	handler = CORSHandler(handler)
+	handler = HealthCheckHandler(handler)
+	return handler
+}
+
 func (r *Router) Get(path string, h HandlerFunc) {
 	r.HandleFunc(path, r.makeHTTPHandler(h)).Methods(http.MethodGet)
 }
@@ -86,7 +145,7 @@ func (r *Router) Post(path string, h HandlerFunc) {
 func (r *Router) makeHTTPHandler(h HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		// Initialize context with Request ID and other metadata
-		newCtx := requestid.MiddlewareRequestIdHTTP(req)
+		newCtx := requestid.MiddlewareRequestId(req.Context(), nil)
 
 		ctx := Context{
 			Context:      newCtx,
@@ -96,9 +155,9 @@ func (r *Router) makeHTTPHandler(h HandlerFunc) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		resp, err := h(ctx)
-		
+
 		reqID := requestid.GetRequestId(ctx)
-		
+
 		if err != nil {
 			statusCode := http.StatusInternalServerError
 			message := err.Error()

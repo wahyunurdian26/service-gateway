@@ -1,7 +1,7 @@
 package dto
 
 import (
-	pbaccount "microservice/cp-proto/account"
+	pbaccount "github.com/wahyunurdian26/client/account"
 )
 
 type AccountBalanceResponse struct {

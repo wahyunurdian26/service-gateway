@@ -1,7 +1,7 @@
 package dto
 
 import (
-	pbtransaction "microservice/cp-proto/transaction"
+	pbtransaction "github.com/wahyunurdian26/client/transaction"
 )
 
 type PaymentResponse struct {

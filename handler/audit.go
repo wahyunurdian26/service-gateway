@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"microservice/gateway/kit"
-	uLog "microservice/util/logger"
+	"github.com/wahyunurdian26/gateway/kit"
+	uLog "github.com/wahyunurdian26/util/logger"
 )
 
 type auditResponse struct {

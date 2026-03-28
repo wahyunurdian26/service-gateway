@@ -10,11 +10,10 @@ import (
 	kitlog "github.com/go-kit/log"
 	"github.com/gorilla/mux"
 
-	"microservice/gateway/config"
-	"microservice/gateway/handler"
-	"microservice/gateway/kit"
-	"microservice/gateway/util"
-	"microservice/util/middleware"
+	"github.com/wahyunurdian26/gateway/config"
+	"github.com/wahyunurdian26/gateway/handler"
+	"github.com/wahyunurdian26/gateway/kit"
+	"github.com/wahyunurdian26/gateway/util"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -59,7 +58,7 @@ func main() {
 
 	go func() {
 		logger.Log("transport", "HTTP", "addr", httpPort)
-		errs <- http.ListenAndServe(":"+httpPort, middleware.DefaultHTTPHandler(r))
+		errs <- http.ListenAndServe(":"+httpPort, kit.DefaultHTTPHandler(r))
 	}()
 
 	logger.Log("exit", <-errs)

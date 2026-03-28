@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"microservice/gateway/handler/dto"
-	"microservice/gateway/kit"
-	uLog "microservice/util/logger"
+	"github.com/wahyunurdian26/gateway/handler/dto"
+	"github.com/wahyunurdian26/gateway/kit"
+	uLog "github.com/wahyunurdian26/util/logger"
 )
 
 func (h *GatewayHandler) serveCreatePayment(ctx kit.Context) (interface{}, error) {
