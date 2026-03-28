@@ -4,6 +4,7 @@ go 1.25.6
 
 require (
 	github.com/go-kit/log v0.2.0
+	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
 	github.com/wahyunurdian26/client v0.0.3-0.20260328154636-96c8ec8e6569
@@ -17,6 +18,7 @@ require (
 	github.com/elastic/go-licenser v0.3.1 // indirect
 	github.com/elastic/go-sysinfo v1.1.1 // indirect
 	github.com/elastic/go-windows v1.0.0 // indirect
+	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/go-kit/kit v0.13.0 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
