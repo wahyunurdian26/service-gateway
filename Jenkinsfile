@@ -4,8 +4,8 @@ pipeline {
     environment {
         // Image Config
         REGISTRY = "ghcr.io/wahyunurdian26"
-        IMAGE_NAME = "gateway"
-        APP_NAME = "gateway"
+        IMAGE_NAME = "service-gateway"
+        APP_NAME = "service-gateway"
 
         // Deployment Repo
         DEPLOY_REPO = "https://github.com/wahyunurdian26/deployment-config.git"

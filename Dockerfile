@@ -42,5 +42,5 @@ WORKDIR /app
 COPY --from=binary-builder /app/main .
 COPY --from=builder /bin/grpc_health_probe /usr/bin/local/grpc_health_probe
 
-EXPOSE 8080 6660
+EXPOSE 8988 6660
 CMD ["./main"]
